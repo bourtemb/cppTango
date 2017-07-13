@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+ls -la
+echo
+pwd
+whoami
 docker exec cpp_tango mkdir -p /home/tango/idl/build
 docker exec cpp_tango mkdir -p /home/tango/src/build
 
