@@ -29,7 +29,7 @@ before_script:
   - TANGO_HOST=${IPADDR}:10000
   - docker build -t cpp_tango .travis/${OS_TYPE}
   - docker run --name cpp_tango -e TANGO_HOST=${TANGO_HOST} --link tango_cs:tango_cs -v `pwd`:/home/tango/src -v `pwd`/idl:/home/tango/idl -dit cpp_tango
-  - chmod -R 777 `pwd`
+#  - chmod -R 777 `pwd`
 
 script:
   - .travis/run.sh

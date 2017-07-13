@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 docker exec cpp_tango ls -la
 echo
-docker exec cpp_tango whoami
+docker exec cpp_tango id
 echo
 docker exec cpp_tango ls -la /home/tango/idl
 echo
