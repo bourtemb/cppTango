@@ -1,5 +1,9 @@
 FROM debian:jessie
 
+ARG UID=1000
+
+ARG GID=1000
+
 MAINTAINER TANGO Controls team <tango@esrf.fr>
 
 RUN apt-get update && apt-get install -y apt-utils
