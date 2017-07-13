@@ -1,8 +1,8 @@
 FROM debian:jessie
 
-ARG UID=1000
+ARG APP_UID=1000
 
-ARG GID=1000
+ARG APP_GID=1000
 
 MAINTAINER TANGO Controls team <tango@esrf.fr>
 
