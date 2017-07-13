@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
-ls -la
+docker exec cpp_tango ls -la
 echo
-pwd
-whoami
+docker exec cpp_tango whoami
+echo
+docker exec cpp_tango ls -la /home/tango/idl
+echo
+docker exec cpp_tango ls -la /home/tango/src
 docker exec cpp_tango mkdir -p /home/tango/idl/build
 docker exec cpp_tango mkdir -p /home/tango/src/build
 
