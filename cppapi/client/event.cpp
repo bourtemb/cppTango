@@ -3113,7 +3113,7 @@ void EventConsumer::get_fire_sync_event(DeviceProxy *device,CallBack *callback,E
 // A small 10 mS sleep here! This is required in case there is a push_event in the read_attribute (or pipe)
 // method on the device side. This sleep gives time to ZMQ to send its subscription message
 //
-
+/*
 #ifndef _TG_WINDOWS_
 	struct timespec to_wait,inter;
 	to_wait.tv_sec = 0;
@@ -3122,7 +3122,7 @@ void EventConsumer::get_fire_sync_event(DeviceProxy *device,CallBack *callback,E
 	nanosleep(&to_wait,&inter);
 #else
 	Sleep(25);
-#endif
+#endif*/
 
 	if ((event == CHANGE_EVENT) ||
 	    (event == QUALITY_EVENT) ||
