@@ -41,7 +41,7 @@ cmake ..
 [-DTANGO_DEVICE_SERVER_PATH=<installation folder for device servers, will be availabe via pkg-config>] 
 [-DOMNI_BASE=<omniORB4 home folder>] 
 [-DZMQ_BASE=<zmq home folder>] 
-[-DCMAKE_BUILD_TYPE=RELEASE|DEBUG] 
+[-DCMAKE_BUILD_TYPE=Release|Debug] 
 [-DCMAKE_VERBOSE_MAKEFILE=true]; 
 make; 
 [sudo] make install
