@@ -3663,17 +3663,13 @@ inline void DeviceImpl::set_state(const Tango::DevState &new_state)
 		{ \
 			(*aid.data_5)[index].value.D(C); \
 			A &the_seq = (*aid.data_5)[index].value.D(); \
-			the_seq.replace(ptr->length(),ptr->length(),ptr->get_buffer(),ptr->release()); \
-			if (ptr->release() == true) \
-				ptr->get_buffer(true); \
+			the_seq = *ptr; /* Deep copy */ \
 		} \
 		else if (aid.data_4 != Tango_nullptr) \
 		{ \
 			(*aid.data_4)[index].value.D(C); \
 			A &the_seq = (*aid.data_4)[index].value.D(); \
-			the_seq.replace(ptr->length(),ptr->length(),ptr->get_buffer(),ptr->release()); \
-			if (ptr->release() == true) \
-				ptr->get_buffer(true); \
+			the_seq = *ptr; /* Deep copy */ \
 		} \
 		else \
 		{ \
