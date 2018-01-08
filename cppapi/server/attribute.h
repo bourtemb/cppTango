@@ -76,9 +76,17 @@ struct WantedAttr : public binary_function<A1,A2,R>
 		string st(name);
 		if (st.size() != attr_ptr->get_name_size())
 			return false;
-		transform(st.begin(),st.end(),st.begin(),::tolower);
+		//transform(st.begin(),st.end(),st.begin(),::tolower);
 		return attr_ptr->get_name_lower() == st;
 	}
+    /*	R operator() (A1 attr_ptr, A2 name) const
+	{
+		string st(name);
+		if (st.size() != attr_ptr->get_name_size())
+			return false;
+		transform(st.begin(),st.end(),st.begin(),::tolower);
+		return attr_ptr->get_name_lower() == st;
+	}*/
 };
 
 

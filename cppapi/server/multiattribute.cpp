@@ -269,16 +269,32 @@ MultiAttribute::MultiAttribute(string &dev_name,DeviceClass *dev_class_ptr,Devic
 					(attr.get_writable() == Tango::READ_WRITE))
 				{
 					if (attr.is_fwd() == true)
-						attr_list.push_back(new FwdAttribute(prop_list,attr,dev_name,i));
+                    {
+                        Attribute * new_attr = new FwdAttribute(prop_list,attr,dev_name,i);
+						attr_list.push_back(new_attr);
+                        attr_unordered_map[new_attr->get_name_lower()] = new_attr;
+                    }
 					else
-						attr_list.push_back(new WAttribute(prop_list,attr,dev_name,i));
+                    {
+                        Attribute * new_attr = new WAttribute(prop_list, attr, dev_name, i);
+                        attr_list.push_back(new_attr);
+                        attr_unordered_map[new_attr->get_name_lower()] = new_attr;
+                    }
 				}
 				else
 				{
 					if (attr.is_fwd() == true)
-						attr_list.push_back(new FwdAttribute(prop_list,attr,dev_name,i));
+                    {
+                        Attribute * new_attr = new FwdAttribute(prop_list, attr, dev_name, i);
+                        attr_list.push_back(new_attr);
+                        attr_unordered_map[new_attr->get_name_lower()] = new_attr;
+                    }
 					else
-						attr_list.push_back(new Attribute(prop_list,attr,dev_name,i));
+                    {
+                        Attribute * new_attr = new Attribute(prop_list, attr, dev_name, i);
+                        attr_list.push_back(new_attr);
+                        attr_unordered_map[new_attr->get_name_lower()] = new_attr;
+                    }
 				}
 
 //
@@ -348,6 +364,7 @@ MultiAttribute::~MultiAttribute()
 {
 	for(unsigned long i = 0;i < attr_list.size();i++)
 		delete attr_list[i];
+    attr_unordered_map.clear();
 }
 
 //+-----------------------------------------------------------------------------------------------------------------
@@ -786,12 +803,16 @@ void MultiAttribute::add_attribute(string &dev_name,DeviceClass *dev_class_ptr,l
 	{
 		if (idl_3 == false)
 		{
-			attr_list.push_back(new WAttribute(prop_list,attr,dev_name,index));
+            Attribute * new_attr = new WAttribute(prop_list,attr,dev_name,index);
+			attr_list.push_back(new_attr);
+            attr_unordered_map[new_attr->get_name_lower()] = new_attr;
 			index = attr_list.size() - 1;
 		}
 		else
 		{
-			attr_list.insert(ite,new WAttribute(prop_list,attr,dev_name,index));
+            Attribute * new_attr = new WAttribute(prop_list,attr,dev_name,index);
+			attr_list.insert(ite,new_attr);
+            attr_unordered_map[new_attr->get_name_lower()] = new_attr;
 			index = attr_list.size() - 3;
 		}
 	}
@@ -799,12 +820,16 @@ void MultiAttribute::add_attribute(string &dev_name,DeviceClass *dev_class_ptr,l
 	{
 		if (idl_3 == false)
 		{
-			attr_list.push_back(new Attribute(prop_list,attr,dev_name,index));
+            Attribute * new_attr = new Attribute(prop_list,attr,dev_name,index);
+            attr_list.push_back(new_attr);
+            attr_unordered_map[new_attr->get_name_lower()] = new_attr;
 			index = attr_list.size() - 1;
 		}
 		else
 		{
-			attr_list.insert(ite,new Attribute(prop_list,attr,dev_name,index));
+            Attribute * new_attr = new Attribute(prop_list,attr,dev_name,index);
+            attr_list.insert(ite,new_attr);
+            attr_unordered_map[new_attr->get_name_lower()] = new_attr;
 			index = attr_list.size() - 3;
 		}
 	}
@@ -936,7 +961,9 @@ void MultiAttribute::add_fwd_attribute(string &dev_name,DeviceClass *dev_class_p
 	vector<Attribute *>::iterator ite;
 	ite = attr_list.end() - 2;
 
-	attr_list.insert(ite,new FwdAttribute(prop_list,*new_attr,dev_name,index));
+    Attribute * new_fwd_attr = new FwdAttribute(prop_list,*new_attr,dev_name,index);
+	attr_list.insert(ite,new_fwd_attr);
+    attr_unordered_map[new_fwd_attr->get_name_lower()] = new_fwd_attr;
 	index = attr_list.size() - 3;
 
 //
@@ -1005,10 +1032,12 @@ void MultiAttribute::remove_attribute(string &attr_name,bool update_idx)
 	DeviceImpl *the_dev = att->get_att_device();
 	string &dev_class_name = the_dev->get_device_class()->get_name();
 
+    attr_unordered_map.erase(att->get_name_lower());
 	delete att;
 	vector<Tango::Attribute *>::iterator pos = attr_list.begin();
 	advance(pos,att_index);
 	pos = attr_list.erase(pos);
+
 
 //
 // Update all the index for attribute following the one which has been deleted
@@ -1103,12 +1132,14 @@ void MultiAttribute::remove_attribute(string &attr_name,bool update_idx)
 //
 //-------------------------------------------------------------------------------------------------------------------
 
-Attribute &MultiAttribute::get_attr_by_name(const char *attr_name)
+/*Attribute &MultiAttribute::get_attr_by_name(const char *attr_name)
 {
 	vector<Attribute *>::iterator pos;
 
+	string att_name(attr_name);
+	transform(att_name.begin(),att_name.end(),att_name.begin(),::tolower);
 	pos = find_if(attr_list.begin(),attr_list.end(),
-		      bind2nd(WantedAttr<Attribute *,const char *,bool>(),attr_name));
+		      bind2nd(WantedAttr<Attribute *,const char *,bool>(),att_name.c_str()));
 
 	if (pos == attr_list.end())
 	{
@@ -1122,6 +1153,28 @@ Attribute &MultiAttribute::get_attr_by_name(const char *attr_name)
 	}
 
 	return *(*pos);
+}*/
+
+Attribute &MultiAttribute::get_attr_by_name(const char *attr_name)
+{
+    Attribute * attr = 0;
+    try
+    {
+        string st(attr_name);
+        transform(st.begin(),st.end(),st.begin(),::tolower);
+        attr = attr_unordered_map.at(st);
+    }
+    catch(out_of_range e)
+    {
+        cout3 << "MultiAttribute::get_attr_by_name throwing exception" << endl;
+        TangoSys_OMemStream o;
+
+        o << attr_name << " attribute not found" << ends;
+        Except::throw_exception((const char *)API_AttrNotFound,
+                                o.str(),
+                                (const char *)"MultiAttribute::get_attr_by_name");
+    }
+    return *attr;
 }
 
 //+------------------------------------------------------------------------------------------------------------------
@@ -1140,7 +1193,7 @@ Attribute &MultiAttribute::get_attr_by_name(const char *attr_name)
 //		A reference to the wanted attribute or throws an exception id the attribute is not found
 //
 //-------------------------------------------------------------------------------------------------------------------
-
+// TODO
 WAttribute &MultiAttribute::get_w_attr_by_name(const char *attr_name)
 {
 	vector<Attribute *>::iterator pos;
