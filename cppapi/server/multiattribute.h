@@ -39,7 +39,6 @@
 #define _MULTIATTRIBUTE_H
 
 #include <tango.h>
-#include <unordered_map>
 
 namespace Tango
 {
@@ -261,8 +260,7 @@ protected:
  * This vector is often referred as the main attributes vector
  */
 	vector<Attribute *>	attr_list;
-	//unordered_map<string, Attribute *> attr_unordered_map;
-    map<string, Attribute *> attr_unordered_map;
+    map<string, Attribute *> attr_map;
 /**
  * The list of writable attribute.
  *
@@ -293,7 +291,7 @@ public:
 	void add_attr(Attribute *att)
 	{
 		attr_list.push_back(att);
-		attr_unordered_map[att->get_name_lower()] = att;
+		attr_map[att->get_name_lower()] = att;
 	}
 	void update(Attribute &,string &);
 	void check_idl_release(DeviceImpl *);
