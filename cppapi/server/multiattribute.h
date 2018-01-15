@@ -261,7 +261,6 @@ protected:
  * This vector is often referred as the main attributes vector
  */
 	vector<Attribute *>	attr_list;
-    unordered_map<string, Attribute *> attr_map;
 /**
  * The list of writable attribute.
  *
@@ -292,7 +291,7 @@ public:
 	void add_attr(Attribute *att)
 	{
 		attr_list.push_back(att);
-		attr_map[att->get_name_lower()] = att;
+		ext->attr_map[att->get_name_lower()] = att;
 	}
 	void update(Attribute &,string &);
 	void check_idl_release(DeviceImpl *);
@@ -301,6 +300,9 @@ public:
 private:
     class MultiAttributeExt
     {
+	public:
+		MultiAttributeExt() {}
+		unordered_map<string, Attribute *> attr_map;
     };
 
 	void concat(vector<AttrProperty> &,vector<AttrProperty> &,vector<AttrProperty> &);
