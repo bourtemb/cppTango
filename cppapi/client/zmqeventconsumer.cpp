@@ -1966,7 +1966,6 @@ void ZmqEventConsumer::push_zmq_event(string &ev_name,unsigned char endian,zmq::
     map<std::string,EventCallBackStruct>::iterator ipos;
     size_t loop;
     bool no_db_dev = false;
-    bool first_search_succeed = false;
 
     size_t pos = ev_name.find('/',8);
     string base_tango_host = ev_name.substr(0,pos + 1);
@@ -1993,9 +1992,6 @@ void ZmqEventConsumer::push_zmq_event(string &ev_name,unsigned char endian,zmq::
 
         if (ipos != event_callback_map.end())
         {
-        	if (loop == 0)
-				first_search_succeed = true;
-
             const AttributeValue *attr_value = NULL;
             const AttributeValue_3 *attr_value_3 = NULL;
             const ZmqAttributeValue_4 *z_attr_value_4 = NULL;
