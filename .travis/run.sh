@@ -39,7 +39,7 @@ then
   docker exec cpp_tango                                            \
     /home/tango/build-wrapper-linux-x86/build-wrapper-linux-x86-64 \
     --out-dir /home/tango/src/bw-output                            \
-    make -C /home/tango/src/build
+    make -C /home/tango/src/build $MAKEFLAGS
 else
-  docker exec cpp_tango make -C /home/tango/src/build
+  docker exec cpp_tango make -C /home/tango/src/build $MAKEFLAGS
 fi
