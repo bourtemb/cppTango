@@ -205,7 +205,7 @@ deploy:
     # Personal Access token with repo scope, encrypted via https://ci.appveyor.com/tools/encrypt
     secure: sopO601Pj8tpcNl7VZk+qsznZ/14mlYZ8wL9vqIjrEE1RtKS2ZLFBnYs7gEq9smE
   artifact: /.*/
-  repository: tango-controls/cppTango
+  repository: bourtemb/cppTango
   draft: true
   prerelease: true
   force_update: true
